@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "848858104508",
+    "project_id": "vrksh-vaatika",
+    "storage_bucket": "vrksh-vaatika.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848858104508:android:80adeae77487cfbda686b9",
+        "android_client_info": {
+          "package_name": "com.example.vrksh_vaatika"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "848858104508-sfkr4cnjqpoe58tdkvh4i5bfbn9kgjr6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vrksh_vaatika",
+            "certificate_hash": "2618a409180435efee09a2e6fc42c1347bacc9ea"
+          }
+        },
+        {
+          "client_id": "848858104508-9mg0e1ip9kck41ens3l67uh9sku6qh4i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChBEDmAxriIlCHgTEIrefaTRBMt0cyq3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "848858104508-9mg0e1ip9kck41ens3l67uh9sku6qh4i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

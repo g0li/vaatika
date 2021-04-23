@@ -1,12 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:vrksh_vaatika/provider/auth_provider.dart';
 
 import 'home.dart';
 
 class LoginPage extends StatelessWidget {
+  AuthProvider provider;
+  TextEditingController _phone = TextEditingController();
+  TextEditingController _otp = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    provider = Provider.of<AuthProvider>(context);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -54,6 +60,7 @@ class LoginPage extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10)),
                               margin: EdgeInsets.symmetric(horizontal: 8),
                               child: TextFormField(
+                                controller: _phone,
                                 keyboardType: TextInputType.phone,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly
@@ -67,7 +74,7 @@ class LoginPage extends StatelessWidget {
                               height: 10,
                             ),
                             Visibility(
-                              visible: false,
+                              visible: provider.vId != null,
                               child: Container(
                                 padding: EdgeInsets.all(4),
                                 width: MediaQuery.of(context).size.width,
@@ -76,6 +83,8 @@ class LoginPage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10)),
                                 margin: EdgeInsets.symmetric(horizontal: 8),
                                 child: TextFormField(
+                                  controller: _otp,
+                                  obscureText: true,
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly
@@ -91,8 +100,17 @@ class LoginPage extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(context,
-                              CupertinoPageRoute(builder: (c) => HomePage()));
+                          if (provider.vId == null) {
+                            provider.submitPhoneNumber(
+                                _phone.text.toString().trim());
+                          } else {
+                            provider
+                                .submitOTP(_otp.text.toString().trim())
+                                .then((value) => Navigator.pushReplacement(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (c) => HomePage())));
+                          }
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -101,7 +119,7 @@ class LoginPage extends StatelessWidget {
                           padding: EdgeInsets.all(16),
                           alignment: Alignment.topLeft,
                           child: Text(
-                            'Continue\n',
+                            (provider.vId == null) ? 'Continue\n' : 'Enter OTP',
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                         ),
