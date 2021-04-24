@@ -72,13 +72,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.black,
                   image: DecorationImage(
                     image: pickedFile != null
                         ? FileImage(File(pickedFile.path))
                         : provider.appUser != null
-                            ? NetworkImage(provider.appUser.profilePicture ??
-                                'https://via.placeholder.com/150')
+                            ? MemoryImage(
+                                base64Decode(provider.appUser.profilePicture))
                             : NetworkImage('https://via.placeholder.com/150'),
                     fit: BoxFit.cover,
                   ),
