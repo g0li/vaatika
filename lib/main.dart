@@ -7,8 +7,10 @@ import 'package:vrksh_vaatika/pages/plant_detail.dart';
 import 'package:vrksh_vaatika/pages/profile.dart';
 import 'package:vrksh_vaatika/provider/auth_provider.dart';
 import 'package:vrksh_vaatika/provider/homeprovider.dart';
+import 'package:vrksh_vaatika/provider/new_listing_provider.dart';
 import 'package:vrksh_vaatika/provider/profile_provider.dart';
 
+import 'pages/trade/new_trade.dart';
 import 'provider/plant_detail_provider.dart';
 
 void main() async {
@@ -37,6 +39,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           child: ProfilePage(),
           create: (c) => ProfileProvider(c),
+        ),
+        ChangeNotifierProvider(
+          child: NewTradeItemPage(),
+          create: (c) => NewListingProvider(c),
         )
       ],
       child: MaterialApp(

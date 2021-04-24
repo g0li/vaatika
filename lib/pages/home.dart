@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                       onChanged: (_) {},
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Search area',
+                        labelText: 'Search area',
                       )),
                 )),
                 SizedBox(width: 10),

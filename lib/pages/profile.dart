@@ -82,7 +82,7 @@ class ProfilePage extends StatelessWidget {
                       controller: provider.nameController,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
-                          hintText: 'Name', border: InputBorder.none),
+                          labelText: 'Name', border: InputBorder.none),
                     ),
                   ),
                   SizedBox(
@@ -101,7 +101,7 @@ class ProfilePage extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: InputDecoration(
-                          hintText: 'Phone no.', border: InputBorder.none),
+                          labelText: 'Phone no.', border: InputBorder.none),
                     ),
                   ),
                   SizedBox(

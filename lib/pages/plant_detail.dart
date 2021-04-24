@@ -104,7 +104,7 @@ class _PlantDetailPageState extends State<PlantDetailPage> {
                   child: TextFormField(
                     controller: provider.plantNameController,
                     decoration: InputDecoration(
-                        hintText: 'Plant Name', border: InputBorder.none),
+                        labelText: 'Plant Name', border: InputBorder.none),
                   ),
                 ),
                 Container(
@@ -117,7 +117,7 @@ class _PlantDetailPageState extends State<PlantDetailPage> {
                   child: TextFormField(
                     controller: provider.descriptionController,
                     decoration: InputDecoration(
-                        hintText: 'Description  ', border: InputBorder.none),
+                        labelText: 'Description  ', border: InputBorder.none),
                   ),
                 ),
                 Row(
@@ -133,7 +133,7 @@ class _PlantDetailPageState extends State<PlantDetailPage> {
                         controller: provider.ownedSinceController,
                         keyboardType: TextInputType.datetime,
                         decoration: InputDecoration(
-                            hintText: 'Owned Since (MM/YY)',
+                            labelText: 'Owned Since (MM/YY)',
                             border: InputBorder.none),
                       ),
                     ),
@@ -151,7 +151,7 @@ class _PlantDetailPageState extends State<PlantDetailPage> {
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         decoration: InputDecoration(
-                            hintText: 'Quantity', border: InputBorder.none),
+                            labelText: 'Quantity', border: InputBorder.none),
                       ),
                     ),
                   ],

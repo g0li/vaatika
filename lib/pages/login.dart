@@ -104,7 +104,7 @@ class LoginPage extends StatelessWidget {
                                           FilteringTextInputFormatter.digitsOnly
                                         ],
                                         decoration: InputDecoration(
-                                            hintText: 'Phone No.',
+                                            labelText: 'Phone No.',
                                             border: InputBorder.none),
                                       ),
                                     ),
@@ -132,7 +132,7 @@ class LoginPage extends StatelessWidget {
                                                 .digitsOnly
                                           ],
                                           decoration: InputDecoration(
-                                              hintText: 'OTP',
+                                              labelText: 'OTP',
                                               border: InputBorder.none),
                                         ),
                                       ),

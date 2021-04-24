@@ -12,6 +12,9 @@ import 'package:vrksh_vaatika/provider/plant_detail_provider.dart';
 import 'package:vrksh_vaatika/services/garden_services.dart';
 
 class GardenPage extends StatefulWidget {
+  final bool getPlant;
+
+  const GardenPage({Key key, this.getPlant}) : super(key: key);
   @override
   _GardenPageState createState() => _GardenPageState();
 }
@@ -67,14 +70,17 @@ class _GardenPageState extends State<GardenPage> {
                     Datum datum = garden.data[i];
                     return InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (c) => ChangeNotifierProvider(
-                                child: PlantDetailPage(),
-                                create: (c) => PlantDetailProvider(c, datum),
-                              ),
-                            )).then((value) => setState(() {}));
+                        if (!widget.getPlant)
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (c) => ChangeNotifierProvider(
+                                  child: PlantDetailPage(),
+                                  create: (c) => PlantDetailProvider(c, datum),
+                                ),
+                              )).then((value) => setState(() {}));
+                        else
+                          Navigator.pop(context, datum);
                       },
                       child: Card(
                         shape: RoundedRectangleBorder(
