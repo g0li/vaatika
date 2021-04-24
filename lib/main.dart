@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           child: HomePage(),
-          create: (c) => HomeProvider(),
+          create: (c) => HomeProvider(c),
         ),
         ChangeNotifierProvider(
           child: PlantDetailPage(),

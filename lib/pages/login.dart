@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
                         CupertinoPageRoute(
                           builder: (c) => ChangeNotifierProvider(
                             child: HomePage(),
-                            create: (c) => HomeProvider(),
+                            create: (c) => HomeProvider(c),
                           ),
                         ));
                   });
@@ -156,7 +156,7 @@ class LoginPage extends StatelessWidget {
                                             builder: (c) =>
                                                 ChangeNotifierProvider(
                                               child: HomePage(),
-                                              create: (c) => HomeProvider(),
+                                              create: (c) => HomeProvider(c),
                                             ),
                                           ));
                                     });

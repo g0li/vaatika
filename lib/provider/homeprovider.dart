@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:vrksh_vaatika/model/listings.dart';
+import 'package:vrksh_vaatika/services/listings_services.dart';
 
 class HomeProvider extends ChangeNotifier {
   CameraPosition currentLocation;
-  HomeProvider() {
+  Listings listing;
+  HomeProvider(mContext) {
     _determinePosition().then((position) {
       currentLocation = CameraPosition(
-          bearing: 192.8334901395799,
+          bearing: 0,
           target: LatLng(position.latitude, position.longitude),
-          zoom: 19.151926040649414);
-      notifyListeners();
+          zoom: 9.151926040649414);
+      ListingsService.getListings(mContext).then((listing) {
+        this.listing = listing;
+        notifyListeners();
+      });
     });
   }
   Future<Position> _determinePosition() async {

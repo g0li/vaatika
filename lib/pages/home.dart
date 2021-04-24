@@ -94,22 +94,29 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.only(bottom: 220, right: 8, top: 84),
                     ),
               headerSearchBarView(),
-              Align(
-                  alignment: Alignment.bottomCenter,
-                  child: DraggableScrollableSheet(
-                    builder: (BuildContext context, myscrollController) {
-                      return Container(
-                        color: Colors.grey.shade100,
-                        child: ListView.builder(
-                          controller: myscrollController,
-                          itemCount: 25,
-                          itemBuilder: (BuildContext context, int index) {
-                            return HomePlantItem();
-                          },
-                        ),
-                      );
-                    },
-                  )),
+              Visibility(
+                visible: provider.listing != null &&
+                    provider.listing.data.length > 0,
+                child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: DraggableScrollableSheet(
+                      builder: (BuildContext context, myscrollController) {
+                        return Container(
+                          color: Colors.grey.shade100,
+                          child: provider.listing != null
+                              ? ListView.builder(
+                                  controller: myscrollController,
+                                  itemCount: provider.listing.data.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return HomePlantItem();
+                                  },
+                                )
+                              : Container(),
+                        );
+                      },
+                    )),
+              ),
             ],
           ),
         ),
