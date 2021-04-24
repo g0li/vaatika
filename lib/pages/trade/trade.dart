@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vrksh_vaatika/services/my_listings_provider.dart';
 
 import 'my_trade_tab.dart';
 import 'open_trade_tab.dart';
@@ -41,7 +43,10 @@ class TradePage extends StatelessWidget {
         body: TabBarView(
           children: <Widget>[
             OpenTradeTab(),
-            MyTradeTab(),
+            ChangeNotifierProvider(
+              child: MyTradeTab(),
+              create: (c) => MyListingsProvider(c),
+            )
           ],
         ),
       ),

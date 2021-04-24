@@ -45,8 +45,9 @@ class _HomePageState extends State<HomePage> {
           ActionButton(
             onPressed: () {
               SchedulerBinding.instance.addPostFrameCallback((_) {
-                Navigator.push(
-                    context, CupertinoPageRoute(builder: (c) => GardenPage()));
+                Navigator.push(context,
+                        CupertinoPageRoute(builder: (c) => GardenPage()))
+                    .then((value) => HomeProvider(context));
               });
             },
             icon: Icon(Icons.grass),

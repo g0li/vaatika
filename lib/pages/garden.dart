@@ -14,7 +14,7 @@ import 'package:vrksh_vaatika/services/garden_services.dart';
 class GardenPage extends StatefulWidget {
   final bool getPlant;
 
-  const GardenPage({Key key, this.getPlant}) : super(key: key);
+  const GardenPage({Key key, this.getPlant = false}) : super(key: key);
   @override
   _GardenPageState createState() => _GardenPageState();
 }

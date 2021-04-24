@@ -1,8 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vrksh_vaatika/model/listing/listings.dart';
+import 'package:vrksh_vaatika/pages/trade/edit_trade.dart';
 import 'package:vrksh_vaatika/pages/trade/new_trade.dart';
+import 'package:vrksh_vaatika/provider/edit_listing_provider.dart';
 
 class MyPlantItem extends StatelessWidget {
+  MyPlantItem({this.data});
+  Datum data;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -25,17 +31,8 @@ class MyPlantItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Plant Name'),
-                      Wrap(
-                        children: [
-                          Text('Trading for : '),
-                          Text('PLANT '),
-                          Text('PLANT '),
-                          Text('PLANT '),
-                          Text('PLANT '),
-                          Text('PLANT '),
-                        ],
-                      ),
+                      Text(data.plantName),
+                      Text('Trading for : ${data.lookingFor}'),
                       Text('Status : ACTIVE'),
                     ],
                   ),
@@ -57,7 +54,10 @@ class MyPlantItem extends StatelessWidget {
                   Navigator.push(
                       context,
                       CupertinoPageRoute(
-                          builder: (context) => NewTradeItemPage()));
+                          builder: (context) => ChangeNotifierProvider(
+                                child: EditTradeItemPage(),
+                                create: (c) => EditListingProvider(c, data),
+                              )));
                 },
               )),
               Expanded(

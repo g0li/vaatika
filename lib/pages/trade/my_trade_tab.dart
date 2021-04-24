@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vrksh_vaatika/services/my_listings_provider.dart';
 import 'package:vrksh_vaatika/widgets/home_plant_item.dart';
 import 'package:vrksh_vaatika/widgets/my_plant_item.dart';
 
 import 'new_trade.dart';
 
 class MyTradeTab extends StatelessWidget {
+  MyListingsProvider provider;
   @override
   Widget build(BuildContext context) {
+    provider = Provider.of<MyListingsProvider>(context);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -33,12 +37,18 @@ class MyTradeTab extends StatelessWidget {
                   label: Text('New Listing')),
             ),
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            primary: false,
-            itemBuilder: (c, i) => MyPlantItem(),
-            itemCount: 3,
-          ),
+          provider.listings != null
+              ? Visibility(
+                  visible: provider.listings != null,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    primary: false,
+                    itemBuilder: (c, i) =>
+                        MyPlantItem(data: provider.listings.data[i]),
+                    itemCount: provider.listings.data.length,
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

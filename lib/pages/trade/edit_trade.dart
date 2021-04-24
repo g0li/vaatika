@@ -8,35 +8,28 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:vrksh_vaatika/model/category.dart';
 import 'package:vrksh_vaatika/model/garden.dart';
-import 'package:vrksh_vaatika/model/listing/listing_body.dart' as lb;
-import 'package:vrksh_vaatika/model/listing/listings.dart' as l;
-import 'package:vrksh_vaatika/pages/garden.dart';
-import 'package:vrksh_vaatika/provider/new_listing_provider.dart';
-import 'package:vrksh_vaatika/provider/plant_detail_provider.dart';
+import 'package:vrksh_vaatika/provider/edit_listing_provider.dart';
 import 'package:vrksh_vaatika/services/listings_services.dart';
+import 'package:vrksh_vaatika/model/listing/listings.dart' as l;
+import 'package:vrksh_vaatika/model/listing/listing_body.dart' as lb;
 
-class NewTradeItemPage extends StatefulWidget {
-  final l.Datum editable;
-
-  const NewTradeItemPage({Key key, this.editable}) : super(key: key);
+class EditTradeItemPage extends StatefulWidget {
   @override
-  _NewTradeItemPageState createState() => _NewTradeItemPageState();
+  _EditTradeItemPageState createState() => _EditTradeItemPageState();
 }
 
-class _NewTradeItemPageState extends State<NewTradeItemPage> {
-  NewListingProvider provider;
-
+class _EditTradeItemPageState extends State<EditTradeItemPage> {
   Datum datum;
-
+  EditListingProvider provider;
   @override
   Widget build(BuildContext context) {
-    provider = Provider.of<NewListingProvider>(context);
+    provider = Provider.of<EditListingProvider>(context);
     return Scaffold(
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme.copyWith(color: Colors.brown),
         backgroundColor: Colors.white,
         title: Text(
-          widget.editable == null ? 'New Listing' : 'Edit Listing',
+          provider.editable == null ? 'New Listing' : 'Edit Listing',
           style: TextStyle(fontSize: 16, color: Colors.brown),
         ),
       ),
@@ -47,83 +40,14 @@ class _NewTradeItemPageState extends State<NewTradeItemPage> {
             backgroundColor:
                 MaterialStateProperty.resolveWith((states) => Colors.green)),
         child:
-            Text(widget.editable == null ? 'Create Listing' : 'Edit Listing'),
+            Text(provider.editable == null ? 'Create Listing' : 'Edit Listing'),
         onPressed: () {
-          createListing();
+          updateListing();
         },
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Visibility(
-              visible: widget.editable == null,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButtonTheme(
-                  data: ElevatedButtonThemeData(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.resolveWith(
-                              (states) => Colors.white),
-                          foregroundColor: MaterialStateProperty.resolveWith(
-                              (states) => Colors.green),
-                          minimumSize: MaterialStateProperty.resolveWith(
-                              (states) => Size(
-                                  MediaQuery.of(context).size.width, 48)))),
-                  child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => ChangeNotifierProvider(
-                                child: GardenPage(
-                                  getPlant: true,
-                                ),
-                                create: (c) => NewListingProvider(
-                                  c,
-                                ),
-                              ),
-                            )).then((value) {
-                          provider.updateDatum(value);
-                        });
-                      },
-                      icon: Icon(Icons.grass),
-                      label: Text('Select From Garden')),
-                ),
-              ),
-            ),
-            Visibility(
-              visible: widget.editable == null,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Flexible(
-                      flex: 3,
-                      child: Container(
-                        padding: const EdgeInsets.all(3.0),
-                        height: 2,
-                        color: Colors.grey.shade100,
-                      ),
-                    ),
-                    Flexible(
-                      child: Text(' or '),
-                      flex: 1,
-                    ),
-                    Flexible(
-                      flex: 3,
-                      child: Container(
-                        padding: const EdgeInsets.all(3.0),
-                        height: 2,
-                        color: Colors.grey.shade100,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
@@ -135,27 +59,11 @@ class _NewTradeItemPageState extends State<NewTradeItemPage> {
                     },
                     child: Container(
                       padding: EdgeInsets.all(4),
-                      child: widget.editable != null
-                          ? Image.memory(base64Decode(widget.editable.image),
-                              fit: BoxFit.fill)
-                          : provider.datum != null
-                              ? Image.memory(
-                                  base64Decode(provider.datum.image),
-                                  fit: BoxFit.cover,
-                                  width: MediaQuery.of(context).size.width,
-                                )
-                              : (pickedFile != null)
-                                  ? Image.file(File(pickedFile.path),
-                                      fit: BoxFit.fill)
-                                  : Container(
-                                      padding: EdgeInsets.all(4),
-                                      child: Icon(
-                                        Icons.camera_alt,
-                                        size: 100,
-                                      ),
-                                      height: 300,
-                                      width: MediaQuery.of(context).size.width,
-                                    ),
+                      child: provider.editable != null
+                          ? Image.memory(
+                              base64Decode(provider.editable.image),
+                            )
+                          : Container(),
                       height: 300,
                       width: MediaQuery.of(context).size.width,
                     ),
@@ -306,16 +214,18 @@ class _NewTradeItemPageState extends State<NewTradeItemPage> {
         barrierDismissible: false);
   }
 
-  createListing() {
+  updateListing() async {
     lb.Datum datum = lb.Datum(
-        gardenId: provider.datum.id,
-        quantity:
-            int.parse(provider.quantityController.text.toString().trim()));
-    lb.ListingsBody lBody = lb.ListingsBody(
+      gardenId: provider.editable.gardenId,
+      quantity: int.parse(
+        provider.quantityController.text.toString().trim(),
+      ),
+    );
+    var body = lb.ListingsBody(
         data: [datum], lookingFor: provider.lookinForController.text.trim());
-    ListingsService.createListing(context, lBody).then((response) {
-      provider.updateDatum(null);
-      print(response.message);
+    ListingsService.updateListingItem(context, body, provider.editable.id)
+        .then((response) {
+      provider.updateEditable(null);
       Navigator.pop(context);
     });
   }
