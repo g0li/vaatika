@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -43,8 +44,10 @@ class _HomePageState extends State<HomePage> {
         children: [
           ActionButton(
             onPressed: () {
-              Navigator.push(
-                  context, CupertinoPageRoute(builder: (c) => GardenPage()));
+              SchedulerBinding.instance.addPostFrameCallback((_) {
+                Navigator.push(
+                    context, CupertinoPageRoute(builder: (c) => GardenPage()));
+              });
             },
             icon: Icon(Icons.grass),
           ),

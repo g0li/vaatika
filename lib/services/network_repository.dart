@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
-import 'package:async/async.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:path/path.dart' as p;
 
 Future callPostMethod(
     BuildContext mContext, String url, Map<String, dynamic> params) async {
