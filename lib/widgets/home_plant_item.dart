@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vrksh_vaatika/model/listing/listings.dart';
 import 'package:vrksh_vaatika/pages/offer_details.dart';
 import 'package:vrksh_vaatika/pages/send_offer.dart';
 
 class HomePlantItem extends StatelessWidget {
+  HomePlantItem(this.data);
+  final Datum data;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -15,7 +20,11 @@ class HomePlantItem extends StatelessWidget {
             children: [
               Flexible(
                 child: Container(
-                  color: Colors.green.shade900,
+                  child: Image.memory(
+                    base64Decode(data.image),
+                    height: 100,
+                    fit: BoxFit.fill,
+                  ),
                 ),
                 flex: 1,
                 fit: FlexFit.tight,
@@ -26,18 +35,9 @@ class HomePlantItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Plant Name'),
+                      Text(data.plantName),
                       Text('0.2 km'),
-                      Wrap(
-                        children: [
-                          Text('Trading for : '),
-                          Text('PLANT '),
-                          Text('PLANT '),
-                          Text('PLANT '),
-                          Text('PLANT '),
-                          Text('PLANT '),
-                        ],
-                      ),
+                      Text('Trading for : ${data.lookingFor}'),
                       Text('Status : ACTIVE'),
                     ],
                   ),

@@ -110,7 +110,8 @@ class _HomePageState extends State<HomePage> {
                                   itemCount: provider.listing.data.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return HomePlantItem();
+                                    return HomePlantItem(
+                                        provider.listing.data[index]);
                                   },
                                 )
                               : Container(),
