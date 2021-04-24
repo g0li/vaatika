@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vrksh_vaatika/pages/home.dart';
 import 'package:vrksh_vaatika/pages/login.dart';
+import 'package:vrksh_vaatika/pages/profile.dart';
 import 'package:vrksh_vaatika/provider/auth_provider.dart';
 import 'package:vrksh_vaatika/provider/homeprovider.dart';
+import 'package:vrksh_vaatika/provider/profile_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +26,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           child: LoginPage(),
           create: (c) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          child: ProfilePage(),
+          create: (c) => ProfileProvider(c),
         )
       ],
       child: MaterialApp(

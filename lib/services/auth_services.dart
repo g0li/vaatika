@@ -8,7 +8,6 @@ class AuthService {
   static Future<AppUser> login(BuildContext mContext, UserBody body) {
     Map<String, dynamic> params = {};
     params.addAll(body.toMap());
-    print(params);
     return api.callPostMethod(mContext, '/api/login', params).then((value) {
       return AppUser.fromJson(value);
     });

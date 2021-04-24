@@ -26,7 +26,7 @@ Future callPostMethod(
 
 Future callPostMethodWithToken(BuildContext mContext, String url,
     Map<String, dynamic> params, String token) async {
-  return http.post(Uri.http('parkshark.demoserver23.com', url),
+  return http.post(Uri.https('vrksh-vaatika.el.r.appspot.com', url),
       body: jsonEncode(params),
       headers: {
         "Accept": "application/json",
@@ -71,18 +71,21 @@ Future callPostMethodNoBodyToken(
 
 Future callGetMethod(
     BuildContext mContext, String url, Map params, String token) async {
-  commonHeaders['Authorization'] = token;
+  commonHeaders['Authorization'] = 'Bearer ' + token;
   return await http
-      .get(Uri.https('vrksh-vaatika.el.r.appspot.com', url))
+      .get(
+          Uri.https(
+            'vrksh-vaatika.el.r.appspot.com',
+            url,
+          ),
+          headers: commonHeaders)
       .then((http.Response response) {
-    // printWrapped("URL--" + url + "\nparams--" + params.toString());
     final int statusCode = response.statusCode;
     if (statusCode == 401) {
       return 'Error statusCode';
     } else if (statusCode < 200 || statusCode > 404 || json == null) {
       return 'Error statusCode';
     }
-    // printWrapped("response--" + response.body);
     return response.body;
   });
 }
@@ -97,7 +100,5 @@ void printWrapped(String text) {
 Map<String, String> commonHeaders = {
   'Accept': 'application/json',
   'Content-Type': 'application/json',
-  'lancode': 'en',
-  "platform": Platform.operatingSystem,
-  "appversion": "0.0.1",
+  "os": Platform.operatingSystem,
 };

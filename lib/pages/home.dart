@@ -10,6 +10,7 @@ import 'package:vrksh_vaatika/pages/login.dart';
 import 'package:vrksh_vaatika/pages/profile.dart';
 import 'package:vrksh_vaatika/pages/trade/trade.dart';
 import 'package:vrksh_vaatika/provider/homeprovider.dart';
+import 'package:vrksh_vaatika/provider/profile_provider.dart';
 import 'package:vrksh_vaatika/widgets/expandable_fab.dart';
 import 'package:vrksh_vaatika/widgets/home_plant_item.dart';
 
@@ -50,7 +51,12 @@ class _HomePageState extends State<HomePage> {
           ActionButton(
             onPressed: () {
               Navigator.push(
-                  context, CupertinoPageRoute(builder: (c) => ProfilePage()));
+                  context,
+                  CupertinoPageRoute(
+                      builder: (c) => ChangeNotifierProvider(
+                            child: ProfilePage(),
+                            create: (c) => ProfileProvider(c),
+                          )));
             },
             icon: const Icon(Icons.face_retouching_natural),
           ),

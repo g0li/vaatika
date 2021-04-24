@@ -18,6 +18,7 @@ class AppUser {
     this.updatedAt,
     this.createdAt,
     this.message,
+    this.profilePicture,
   });
 
   final int status;
@@ -32,6 +33,7 @@ class AppUser {
   final DateTime updatedAt;
   final DateTime createdAt;
   final String message;
+  final String profilePicture;
 
   factory AppUser.fromJson(String str) => AppUser.fromMap(json.decode(str));
 
@@ -43,13 +45,16 @@ class AppUser {
         id: json["id"],
         name: json["name"],
         contact: json["contact"],
-        lat: json["lat"].toDouble() ?? 0,
-        lng: json["lng"].toDouble() ?? 0,
+        lat: json["lat"] == null ? 19 : json["lat"].toDouble() ?? 0,
+        lng: json["lng"] == null ? 20 : json["lng"].toDouble() ?? 0,
         deviceId: json["deviceId"],
         os: json["os"],
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(
+            json["updatedAt"] ?? DateTime.now().toIso8601String()),
+        createdAt: DateTime.parse(
+            json["createdAt"] ?? DateTime.now().toIso8601String()),
         message: json["message"],
+        profilePicture: json["profilePicture"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -65,5 +70,6 @@ class AppUser {
         "updatedAt": updatedAt.toIso8601String(),
         "createdAt": createdAt.toIso8601String(),
         "message": message,
+        "profilePicture": profilePicture,
       };
 }

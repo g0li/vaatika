@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vrksh_vaatika/provider/auth_provider.dart';
+import 'package:vrksh_vaatika/provider/homeprovider.dart';
 
 import 'home.dart';
 
@@ -38,8 +39,14 @@ class LoginPage extends StatelessWidget {
                 jsonString = pref.getString('USER');
                 if (jsonString.length > 0)
                   SchedulerBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushReplacement(context,
-                        CupertinoPageRoute(builder: (c) => HomePage()));
+                    Navigator.pushReplacement(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (c) => ChangeNotifierProvider(
+                            child: HomePage(),
+                            create: (c) => HomeProvider(),
+                          ),
+                        ));
                   });
               } catch (e) {
                 print('json empty');
@@ -146,7 +153,12 @@ class LoginPage extends StatelessWidget {
                                       Navigator.pushReplacement(
                                           context,
                                           CupertinoPageRoute(
-                                              builder: (c) => HomePage()));
+                                            builder: (c) =>
+                                                ChangeNotifierProvider(
+                                              child: HomePage(),
+                                              create: (c) => HomeProvider(),
+                                            ),
+                                          ));
                                     });
                                   }
                                 },
