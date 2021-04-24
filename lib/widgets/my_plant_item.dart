@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +21,10 @@ class MyPlantItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Flexible(
-                child: Container(
-                  color: Colors.green.shade900,
+                child: Image.memory(
+                  base64Decode(data.image),
+                  height: 100,
+                  fit: BoxFit.fill,
                 ),
                 flex: 1,
                 fit: FlexFit.tight,

@@ -50,13 +50,13 @@ class ListingsService {
     });
   }
 
-  // static Future deletePlant(BuildContext mContext, Datum item) async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   AppUser user = AppUser.fromJson(pref.getString('USER'));
-  //   return callPostMethodWithToken(
-  //           mContext, '/api/garden/delete/${item.id}', {}, user.token)
-  //       .then((value) {
-  //     return UserUpdateResponse.fromJson(value);
-  //   });
-  // }
+  static Future deleteListings(BuildContext mContext, id) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    AppUser user = AppUser.fromJson(pref.getString('USER'));
+    return callPostMethodWithToken(
+            mContext, '/api/garden/delete/${id}', {}, user.token)
+        .then((value) {
+      return UserUpdateResponse.fromJson(value);
+    });
+  }
 }
