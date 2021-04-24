@@ -1,13 +1,24 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:vrksh_vaatika/model/user_body.dart';
 import 'package:vrksh_vaatika/provider/profile_provider.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   ProfileProvider provider;
+
   FocusNode nameFN = FocusNode(debugLabel: 'name');
+
   @override
   Widget build(BuildContext context) {
     provider = Provider.of<ProfileProvider>(context);
@@ -31,7 +42,7 @@ class ProfilePage extends StatelessWidget {
       ),
       bottomNavigationBar: provider.edit
           ? ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 UserBody body = UserBody(
                     contact: provider.phoneController.text.trim(),
                     deviceId: provider.appUser.deviceId,
@@ -39,7 +50,10 @@ class ProfilePage extends StatelessWidget {
                     lat: provider.appUser.lat,
                     lng: provider.appUser.lng,
                     name: provider.nameController.text.trim(),
-                    os: provider.appUser.os);
+                    os: provider.appUser.os,
+                    profilePicture: pickedFile != null
+                        ? base64Encode(await pickedFile.readAsBytes())
+                        : provider.appUser.profilePicture);
                 provider.updateProfile(context, body);
               },
               child: Text('Save'))
@@ -49,22 +63,29 @@ class ProfilePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(16),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.black,
-                image: DecorationImage(
-                  image: provider.appUser != null
-                      ? NetworkImage(provider.appUser.profilePicture ??
-                          'https://via.placeholder.com/150')
-                      : NetworkImage('https://via.placeholder.com/150'),
-                  fit: BoxFit.cover,
+            InkWell(
+              onTap: () {
+                if (provider.edit == true) setImage(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(16),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black,
+                  image: DecorationImage(
+                    image: pickedFile != null
+                        ? FileImage(File(pickedFile.path))
+                        : provider.appUser != null
+                            ? NetworkImage(provider.appUser.profilePicture ??
+                                'https://via.placeholder.com/150')
+                            : NetworkImage('https://via.placeholder.com/150'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
+                width: 100,
+                height: 100,
               ),
-              width: 100,
-              height: 100,
             ),
             Container(
               child: Column(
@@ -149,5 +170,46 @@ class ProfilePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  PickedFile pickedFile;
+
+  setImage(context) {
+    showDialog(
+        context: context,
+        builder: (c) => AlertDialog(
+              title: Text('Select Image'),
+              content: Text('Please select an option'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    ImagePicker()
+                        .getImage(source: ImageSource.gallery)
+                        .then((value) {
+                      setState(() {
+                        pickedFile = value;
+                        Navigator.pop(context);
+                      });
+                    });
+                  },
+                  child: Text('Gallery'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    ImagePicker()
+                        .getImage(source: ImageSource.camera)
+                        .then((value) {
+                      setState(() {
+                        pickedFile = value;
+                        Navigator.pop(context);
+                      });
+                    });
+                  },
+                  child: Text('Camera'),
+                ),
+              ],
+            ),
+        useRootNavigator: true,
+        barrierDismissible: false);
   }
 }

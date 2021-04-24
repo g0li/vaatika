@@ -13,6 +13,7 @@ class UserBody {
     this.lng,
     this.deviceId,
     this.os,
+    this.profilePicture,
   });
 
   final String id;
@@ -22,6 +23,7 @@ class UserBody {
   final double lng;
   final String deviceId;
   final String os;
+  final String profilePicture;
 
   factory UserBody.fromJson(String str) => UserBody.fromMap(json.decode(str));
 
@@ -35,6 +37,7 @@ class UserBody {
         lng: json["lng"].toDouble(),
         deviceId: json["deviceId"],
         os: json["os"],
+        profilePicture: json["profilePicture"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -45,5 +48,6 @@ class UserBody {
         "lng": lng,
         "deviceId": deviceId,
         "os": os,
+        "profilePicture": profilePicture,
       };
 }

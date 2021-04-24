@@ -60,6 +60,7 @@ class ProfileProvider extends ChangeNotifier {
   updateProfile(mContext, UserBody body) {
     ProfileService.updateProfile(mContext, body).then((value) {
       edit = false;
+      print(value.message);
       notifyListeners();
     });
   }
