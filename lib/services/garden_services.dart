@@ -36,4 +36,24 @@ class GardenService {
       return value;
     });
   }
+
+  static Future updatePlantItem(BuildContext mContext, GardenItem item) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    AppUser user = AppUser.fromJson(pref.getString('USER'));
+    return callPostMethodWithToken(
+            mContext, '/api/garden/update', item.toMap(), user.token)
+        .then((value) {
+      return value;
+    });
+  }
+
+  static Future deletePlant(BuildContext mContext, Datum item) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    AppUser user = AppUser.fromJson(pref.getString('USER'));
+    return callPostMethodWithToken(
+            mContext, '/api/garden/delete/${item.id}', {}, user.token)
+        .then((value) {
+      return UserUpdateResponse.fromJson(value);
+    });
+  }
 }

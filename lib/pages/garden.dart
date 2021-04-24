@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
@@ -39,9 +40,9 @@ class _GardenPageState extends State<GardenPage> {
                 CupertinoPageRoute(
                   builder: (c) => ChangeNotifierProvider(
                     child: PlantDetailPage(),
-                    create: (c) => PlantDetailProvider(c),
+                    create: (c) => PlantDetailProvider(c, null),
                   ),
-                ));
+                )).then((value) => setState(() {}));
           });
         },
       ),
@@ -62,41 +63,46 @@ class _GardenPageState extends State<GardenPage> {
                       crossAxisCount: 3,
                       mainAxisSpacing: 8,
                       crossAxisSpacing: 4),
-                  itemBuilder: (context, i) => InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (c) => PlantDetailPage()));
-                    },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Column(
-                        children: [
-                          Flexible(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(10)),
+                  itemBuilder: (context, i) {
+                    Datum datum = garden.data[i];
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (c) => ChangeNotifierProvider(
+                                child: PlantDetailPage(),
+                                create: (c) => PlantDetailProvider(c, datum),
                               ),
+                            )).then((value) => setState(() {}));
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Column(
+                          children: [
+                            Flexible(
+                              child: Image.memory(
+                                base64Decode(datum.image),
+                                fit: BoxFit.cover,
+                                width: MediaQuery.of(context).size.width,
+                              ),
+                              fit: FlexFit.tight,
+                              flex: 3,
                             ),
-                            fit: FlexFit.tight,
-                            flex: 3,
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          Flexible(
-                            child: Text('Plant Name'),
-                            fit: FlexFit.tight,
-                            flex: 1,
-                          )
-                        ],
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Flexible(
+                              child: Text(datum.plantName),
+                              fit: FlexFit.tight,
+                              flex: 1,
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 );
               else
                 return Container(

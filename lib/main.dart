@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           child: PlantDetailPage(),
-          create: (c) => PlantDetailProvider(c),
+          create: (c) => PlantDetailProvider(c, null),
         ),
         ChangeNotifierProvider(
           child: LoginPage(),
