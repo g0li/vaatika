@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:vrksh_vaatika/model/listing/listings.dart';
 import 'package:vrksh_vaatika/pages/offer_details.dart';
 import 'package:vrksh_vaatika/pages/send_offer.dart';
@@ -11,76 +11,98 @@ class HomePlantItem extends StatelessWidget {
   final Datum data;
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey.shade100,
+      ),
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
+      width: MediaQuery.of(context).size.width * .9,
       child: Column(
         children: [
-          IntrinsicHeight(
-              child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Flexible(
-                child: Container(
-                  child: Image.memory(
-                    base64Decode(data.image),
-                    height: 100,
-                    fit: BoxFit.fill,
+          Expanded(
+            flex: 20,
+            child: IntrinsicHeight(
+                child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Container(
+                    child: Image.memory(
+                      base64Decode(data.image),
+                      height: 100,
+                      fit: BoxFit.fill,
+                    ),
                   ),
+                  flex: 1,
                 ),
-                flex: 1,
-                fit: FlexFit.tight,
-              ),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(data.plantName),
-                      Text('0.2 km'),
-                      Text('Trading for : ${data.lookingFor}'),
-                      Text('Status : ACTIVE'),
-                    ],
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(data.plantName),
+                        // Text('0.2 km'),
+                        Text('Trading for : ${data.lookingFor}'),
+                        Text('Status : ${data.status}'),
+                      ],
+                    ),
                   ),
-                ),
-                flex: 3,
-                fit: FlexFit.tight,
-              )
-            ],
-          )),
-          Row(
-            children: [
-              Expanded(
-                  child: TextButton(
-                child: Text('Details',
-                    style: TextStyle(
-                      color: Colors.black,
+                  flex: 3,
+                )
+              ],
+            )),
+          ),
+          Expanded(
+            flex: 12,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: TextButton(
+                      child: Text('Details',
+                          style: TextStyle(
+                            color: Colors.black,
+                          )),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (c) => OfferDetailsPage()));
+                      },
                     )),
-                onPressed: () {
-                  Navigator.push(context,
-                      CupertinoPageRoute(builder: (c) => OfferDetailsPage()));
-                },
-              )),
-              Expanded(
-                  child: TextButton(
-                child: Text('Make An Offer',
-                    style: TextStyle(
-                      color: Colors.black,
+                Expanded(
+                    flex: 1,
+                    child: TextButton(
+                      child: Text('Make An Offer',
+                          style: TextStyle(
+                            color: Colors.black,
+                          )),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (c) => SendOfferPage()));
+                      },
                     )),
-                onPressed: () {
-                  Navigator.push(context,
-                      CupertinoPageRoute(builder: (c) => SendOfferPage()));
-                },
-              )),
-              Expanded(
-                  child: TextButton(
-                child: Text('Chat',
-                    style: TextStyle(
-                      color: Colors.black,
-                    )),
-                onPressed: () {},
-              ))
-            ],
-          )
+                Expanded(
+                    flex: 1,
+                    child: TextButton(
+                      child: Text('Chat',
+                          style: TextStyle(
+                            color: Colors.black,
+                          )),
+                      onPressed: () {},
+                    ))
+              ],
+            ),
+          ),
         ],
       ),
     );

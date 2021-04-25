@@ -82,6 +82,7 @@ class _HomePageState extends State<HomePage> {
               provider.currentLocation == null
                   ? Container()
                   : GoogleMap(
+                      markers: provider.markers,
                       myLocationButtonEnabled: true,
                       zoomControlsEnabled: true,
                       minMaxZoomPreference: MinMaxZoomPreference.unbounded,
@@ -94,29 +95,27 @@ class _HomePageState extends State<HomePage> {
                       },
                       padding: EdgeInsets.only(bottom: 220, right: 8, top: 84),
                     ),
-              headerSearchBarView(),
+              // headerSearchBarView(),
               Visibility(
                 visible: provider.listing != null &&
                     provider.listing.data.length > 0,
                 child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: DraggableScrollableSheet(
-                      builder: (BuildContext context, myscrollController) {
-                        return Container(
-                          color: Colors.grey.shade100,
-                          child: provider.listing != null
-                              ? ListView.builder(
-                                  controller: myscrollController,
-                                  itemCount: provider.listing.data.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return HomePlantItem(
-                                        provider.listing.data[index]);
-                                  },
-                                )
-                              : Container(),
-                        );
-                      },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * .25,
+                      child: provider.listing != null
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              primary: false,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: provider.listing.data.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return HomePlantItem(
+                                    provider.listing.data[index]);
+                              },
+                            )
+                          : Container(),
                     )),
               ),
             ],

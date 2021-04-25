@@ -7,15 +7,16 @@ import 'package:vrksh_vaatika/services/listings_services.dart';
 class HomeProvider extends ChangeNotifier {
   CameraPosition currentLocation;
   Listings listing;
+  Set<Marker> markers = {};
   HomeProvider(mContext) {
     _determinePosition().then((position) {
       currentLocation = CameraPosition(
           bearing: 0,
           target: LatLng(position.latitude, position.longitude),
-          zoom: 9.151926040649414);
+          zoom: 14);
       ListingsService.getListings(mContext).then((listing) {
         this.listing = listing;
-        notifyListeners();
+        getMarkerImage(listing);
       });
     });
   }
@@ -43,4 +44,20 @@ class HomeProvider extends ChangeNotifier {
 
     return await Geolocator.getCurrentPosition();
   }
+
+  getMarkerImage(Listings listng) async {
+    markers.clear();
+    for (var item in listng.data) {
+      markers.add(Marker(
+          markerId: MarkerId(item.id.toString()),
+          position: LatLng(item.lat, item.lng),
+          onTap: () {
+            selectedMarker = item;
+            notifyListeners();
+          }));
+    }
+    notifyListeners();
+  }
+
+  Datum selectedMarker;
 }
