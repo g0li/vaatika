@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vrksh_vaatika/model/user_body.dart';
+import 'package:vrksh_vaatika/pages/login.dart';
 import 'package:vrksh_vaatika/provider/profile_provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -75,7 +79,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   image: DecorationImage(
                     image: pickedFile != null
                         ? FileImage(File(pickedFile.path))
-                        : provider.appUser != null
+                        : provider.appUser != null &&
+                                provider.appUser.profilePicture != null
                             ? MemoryImage(
                                 base64Decode(provider.appUser.profilePicture))
                             : NetworkImage('https://via.placeholder.com/150'),
@@ -157,7 +162,16 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: const EdgeInsets.all(8.0),
               child: Align(
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      var pref = await SharedPreferences.getInstance();
+                      pref.clear().then((value) {
+                        FirebaseAuth.instance.signOut().then((value) {
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(context,
+                              CupertinoPageRoute(builder: (c) => LoginPage()));
+                        });
+                      });
+                    },
                     child: Text(
                       'Sign out',
                       style: TextStyle(color: Colors.green),

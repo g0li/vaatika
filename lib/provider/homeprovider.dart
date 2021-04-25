@@ -20,6 +20,8 @@ class HomeProvider extends ChangeNotifier {
       });
     });
   }
+
+  PageController controller = PageController();
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -47,16 +49,15 @@ class HomeProvider extends ChangeNotifier {
 
   getMarkerImage(Listings listng) async {
     markers.clear();
-    for (var item in listng.data) {
+    for (int i = 0; i <= listng.data.length; i++) {
       markers.add(Marker(
-          markerId: MarkerId(item.id.toString()),
-          position: LatLng(item.lat, item.lng),
+          markerId: MarkerId(listng.data[i].id.toString()),
+          position: LatLng(listng.data[i].lat, listng.data[i].lng),
           onTap: () {
-            selectedMarker = item;
-            notifyListeners();
+            controller.animateToPage(i,
+                duration: Duration(milliseconds: 900), curve: Curves.elasticIn);
           }));
     }
-    notifyListeners();
   }
 
   Datum selectedMarker;

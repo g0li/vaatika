@@ -105,9 +105,8 @@ class _HomePageState extends State<HomePage> {
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * .25,
                       child: provider.listing != null
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              primary: false,
+                          ? PageView.builder(
+                              controller: provider.controller,
                               scrollDirection: Axis.horizontal,
                               itemCount: provider.listing.data.length,
                               itemBuilder: (BuildContext context, int index) {
