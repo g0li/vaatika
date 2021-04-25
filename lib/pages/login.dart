@@ -71,7 +71,7 @@ class LoginPage extends StatelessWidget {
                         Container(
                           color: Colors.white,
                           margin: EdgeInsets.only(top: 20),
-                          height: MediaQuery.of(context).size.height * .65,
+                          height: MediaQuery.of(context).size.height * .6,
                           width: MediaQuery.of(context).size.width,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,7 +164,7 @@ class LoginPage extends StatelessWidget {
                                 },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
-                                  height: 68,
+                                  height: 70,
                                   color: Colors.green,
                                   padding: EdgeInsets.all(16),
                                   alignment: Alignment.topLeft,

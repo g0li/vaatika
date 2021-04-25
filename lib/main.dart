@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vrksh_vaatika/pages/home.dart';
 import 'package:vrksh_vaatika/pages/login.dart';
+import 'package:vrksh_vaatika/pages/offer_details.dart';
 import 'package:vrksh_vaatika/pages/plant_detail.dart';
 import 'package:vrksh_vaatika/pages/profile.dart';
 import 'package:vrksh_vaatika/pages/trade/edit_trade.dart';
@@ -12,6 +13,7 @@ import 'package:vrksh_vaatika/provider/edit_listing_provider.dart';
 import 'package:vrksh_vaatika/provider/homeprovider.dart';
 import 'package:vrksh_vaatika/provider/new_listing_provider.dart';
 import 'package:vrksh_vaatika/provider/profile_provider.dart';
+import 'package:vrksh_vaatika/provider/trade_provider.dart';
 import 'package:vrksh_vaatika/services/my_listings_provider.dart';
 
 import 'pages/trade/new_trade.dart';
@@ -41,7 +43,7 @@ class MyApp extends StatelessWidget {
           create: (c) => AuthProvider(),
         ),
         ChangeNotifierProvider(
-          child: ProfilePage(),
+          // child: ProfilePage(),
           create: (c) => ProfileProvider(c),
         ),
         ChangeNotifierProvider(
@@ -55,6 +57,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           child: EditTradeItemPage(),
           create: (c) => EditListingProvider(c, null),
+        ),
+        ChangeNotifierProvider(
+          child: OfferDetailsPage(),
+          create: (c) => TradeProvider(c),
         )
       ],
       child: MaterialApp(

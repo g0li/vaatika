@@ -27,6 +27,18 @@ class ListingsService {
     });
   }
 
+  // get single listing
+  static Future<Listings> getSingleListing(
+      BuildContext mContext, int listingId) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    AppUser user = AppUser.fromJson(pref.getString('USER'));
+    return callGetMethod(
+            mContext, '/api/listing/get/$listingId', {}, user.token)
+        .then((value) {
+      return Listings.fromJson(value);
+    });
+  }
+
   static Future createListing(
       BuildContext mContext, lb.ListingsBody item) async {
     SharedPreferences pref = await SharedPreferences.getInstance();

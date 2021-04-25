@@ -1,14 +1,28 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vrksh_vaatika/model/listing/listings.dart' as listings;
+import 'package:vrksh_vaatika/model/trade_offers.dart';
+import 'package:vrksh_vaatika/provider/profile_provider.dart';
+import 'package:vrksh_vaatika/services/listings_services.dart';
 
 class OfferItem extends StatelessWidget {
+  final Datum offer;
+  OfferItem({@required this.offer});
+
   @override
   Widget build(BuildContext context) {
+    var profileProvider = Provider.of<ProfileProvider>(context);
+    var userId = profileProvider.appUser.id;
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
-            title: Text('username has offered you a trade: '),
+            title: Text(userId == offer.offererId
+                ? 'You offered ${offer.listerName} a trade:'
+                : '${offer.offererName} has offered you a trade'),
             trailing: IconButton(
               icon: Icon(Icons.flag),
               onPressed: () {},
@@ -25,43 +39,80 @@ class OfferItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('username offered: '),
-                GridView.builder(
-                    primary: false,
-                    shrinkWrap: true,
-                    itemCount: 2,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 4),
-                    itemBuilder: (context, i) {
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          children: [
-                            Flexible(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10)),
-                                ),
-                              ),
-                              fit: FlexFit.tight,
-                              flex: 3,
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Flexible(
-                              child: Text('Plant Name'),
-                              fit: FlexFit.tight,
-                              flex: 1,
-                            )
-                          ],
-                        ),
-                      );
+                Text(
+                  userId == offer.listerId
+                      ? '${offer.offererName} offered: '
+                      : 'You offered',
+                ),
+                FutureBuilder<listings.Listings>(
+                    future: ListingsService.getSingleListing(
+                        context, offer.offeredListingId),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Some error occured');
+                      }
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Center(child: CircularProgressIndicator());
+                        default:
+                          var listings = snapshot.data;
+
+                          return (listings != null &&
+                                  listings.data != null &&
+                                  listings.data.length > 0)
+                              ? GridView.builder(
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  itemCount: listings.data.length,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    mainAxisSpacing: 8,
+                                    crossAxisSpacing: 4,
+                                  ),
+                                  itemBuilder: (context, i) {
+                                    return Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: Column(
+                                        children: [
+                                          Flexible(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: MemoryImage(
+                                                    base64.decode(
+                                                      listings.data[i].image,
+                                                    ),
+                                                  ),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                                color: Colors.green,
+                                                borderRadius:
+                                                    BorderRadius.vertical(
+                                                        top: Radius.circular(
+                                                            10)),
+                                              ),
+                                            ),
+                                            fit: FlexFit.tight,
+                                            flex: 3,
+                                          ),
+                                          SizedBox(
+                                            height: 16,
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                                '${listings.data[i].plantName}'),
+                                            fit: FlexFit.tight,
+                                            flex: 1,
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  })
+                              : Container(child: Text('Some error occured'));
+                      }
                     }),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -98,43 +149,82 @@ class OfferItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text('For your: '),
-                GridView.builder(
-                    primary: false,
-                    shrinkWrap: true,
-                    itemCount: 2,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 4),
-                    itemBuilder: (context, i) {
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          children: [
-                            Flexible(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10)),
-                                ),
-                              ),
-                              fit: FlexFit.tight,
-                              flex: 3,
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Flexible(
-                              child: Text('Plant Name'),
-                              fit: FlexFit.tight,
-                              flex: 1,
-                            )
-                          ],
-                        ),
-                      );
+                Text(
+                  userId == offer.listerId
+                      ? 'For your'
+                      : 'For ${offer.listerName}\'s',
+                ),
+                FutureBuilder<listings.Listings>(
+                    future: ListingsService.getSingleListing(
+                      context,
+                      offer.listingId,
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Some error occured');
+                      }
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Center(child: CircularProgressIndicator());
+                        default:
+                          var listings = snapshot.data;
+
+                          return (listings != null &&
+                                  listings.data != null &&
+                                  listings.data.length > 0)
+                              ? GridView.builder(
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  itemCount: listings.data.length,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    mainAxisSpacing: 8,
+                                    crossAxisSpacing: 4,
+                                  ),
+                                  itemBuilder: (context, i) {
+                                    return Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: Column(
+                                        children: [
+                                          Flexible(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: MemoryImage(
+                                                    base64.decode(
+                                                      listings.data[i].image,
+                                                    ),
+                                                  ),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                                color: Colors.green,
+                                                borderRadius:
+                                                    BorderRadius.vertical(
+                                                        top: Radius.circular(
+                                                            10)),
+                                              ),
+                                            ),
+                                            fit: FlexFit.tight,
+                                            flex: 3,
+                                          ),
+                                          SizedBox(
+                                            height: 16,
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                                '${listings.data[i].plantName}'),
+                                            fit: FlexFit.tight,
+                                            flex: 1,
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  })
+                              : Container(child: Text('Some error occured'));
+                      }
                     }),
               ],
             ),
@@ -144,10 +234,10 @@ class OfferItem extends StatelessWidget {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Offer expires on 7 Dec',
-                    style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
-                  ),
+                  // Text(
+                  //   'Offer expires on 7 Dec',
+                  //   style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+                  // ),
                   Row(children: [
                     InkWell(
                       onTap: () {},

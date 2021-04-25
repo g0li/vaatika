@@ -16,7 +16,11 @@ class HomeProvider extends ChangeNotifier {
           zoom: 14);
       ListingsService.getListings(mContext).then((listing) {
         this.listing = listing;
-        getMarkerImage(listing);
+        if (listing != null && listing.data.length > 0) {
+          getMarkerImage(listing);
+        } else {
+          notifyListeners();
+        }
       });
     });
   }

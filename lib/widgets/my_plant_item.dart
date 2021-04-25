@@ -10,7 +10,7 @@ import 'package:vrksh_vaatika/provider/edit_listing_provider.dart';
 
 class MyPlantItem extends StatelessWidget {
   MyPlantItem({this.data});
-  Datum data;
+  final Datum data;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,15 +20,16 @@ class MyPlantItem extends StatelessWidget {
               child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Flexible(
-                child: Image.memory(
-                  base64Decode(data.image),
-                  height: 100,
-                  fit: BoxFit.fill,
+              if (data.image != null)
+                Flexible(
+                  child: Image.memory(
+                    base64Decode(data.image),
+                    height: 100,
+                    fit: BoxFit.fill,
+                  ),
+                  flex: 1,
+                  fit: FlexFit.tight,
                 ),
-                flex: 1,
-                fit: FlexFit.tight,
-              ),
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

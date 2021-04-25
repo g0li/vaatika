@@ -74,7 +74,7 @@ class HomePlantItem extends StatelessWidget {
                         Navigator.push(
                             context,
                             CupertinoPageRoute(
-                                builder: (c) => OfferDetailsPage()));
+                                builder: (c) => OfferDetailsPage(data: data)));
                       },
                     )),
                 Expanded(
