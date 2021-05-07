@@ -8,7 +8,7 @@ import 'dart:async';
 Future callPostMethod(
     BuildContext mContext, String url, Map<String, dynamic> params) async {
   return http
-      .post(Uri.https('vrksh-vaatika.el.r.appspot.com', url),
+      .post(Uri.https('vrksh-vaatika-backend.azurewebsites.net', url),
           body: jsonEncode(params), headers: commonHeaders)
       .then((http.Response response) {
     final int statusCode = response.statusCode;
@@ -23,7 +23,7 @@ Future callPostMethod(
 
 Future callPostMethodWithToken(BuildContext mContext, String url,
     Map<String, dynamic> params, String token) async {
-  return http.post(Uri.https('vrksh-vaatika.el.r.appspot.com', url),
+  return http.post(Uri.https('vrksh-vaatika-backend.azurewebsites.net', url),
       body: jsonEncode(params),
       headers: {
         "Accept": "application/json",
@@ -72,7 +72,7 @@ Future callGetMethod(
   return await http
       .get(
           Uri.https(
-            'vrksh-vaatika.el.r.appspot.com',
+            'vrksh-vaatika-backend.azurewebsites.net',
             url,
           ),
           headers: commonHeaders)

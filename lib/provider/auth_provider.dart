@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vrksh_vaatika/model/app_user.dart';
 import 'package:vrksh_vaatika/model/user_body.dart';
 import 'package:vrksh_vaatika/services/auth_services.dart';
+import 'package:vrksh_vaatika/services/network_repository.dart';
 
 class AuthProvider extends ChangeNotifier {
   AuthCredential phoneAuthCredential;
@@ -24,7 +25,7 @@ class AuthProvider extends ChangeNotifier {
     }
 
     void verificationFailed(error) {
-      print(error);
+      printWrapped(error);
       notifyListeners();
     }
 
