@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:vrksh_vaatika/model/category.dart';
 import 'package:vrksh_vaatika/model/garden.dart';
 import 'package:vrksh_vaatika/services/garden_services.dart';
@@ -17,7 +18,15 @@ class PlantDetailProvider extends ChangeNotifier {
 
     GardenService.getCategory(mContext).then((cat) {
       category = cat;
-      catx = category.categoryList.first;
+      try {
+        catx = category.categoryList.first;
+      } catch (e) {
+        catx = CategoryList(
+            createdAt: DateTime.now(),
+            id: 0,
+            name: '',
+            updatedAt: DateTime.now());
+      }
       if (datum != null) {
         plantNameController = TextEditingController(text: this.datum.plantName);
         descriptionController =
@@ -36,6 +45,11 @@ class PlantDetailProvider extends ChangeNotifier {
   }
   updateCatx(c) {
     catx = c;
+    notifyListeners();
+  }
+
+  void setDate(DateTime val) {
+    ownedSinceController.text = DateFormat.yMMMEd().format(val).toString();
     notifyListeners();
   }
 }

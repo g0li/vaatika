@@ -55,12 +55,15 @@ class _PlantDetailPageState extends State<PlantDetailPage> {
                 backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => Colors.green)),
             child: Text('Save'),
-            onPressed: () {
-              if (provider.datum != null)
-                updatePlant();
-              else
-                postPlant();
-            },
+            onPressed: provider.category != null &&
+                    provider.category.categoryList.length > 0
+                ? () {
+                    if (provider.datum != null)
+                      updatePlant();
+                    else
+                      postPlant();
+                  }
+                : null,
           ),
           body: SingleChildScrollView(
             child: Form(
@@ -129,12 +132,31 @@ class _PlantDetailPageState extends State<PlantDetailPage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10)),
                       margin: EdgeInsets.symmetric(horizontal: 8),
-                      child: TextFormField(
-                        controller: provider.ownedSinceController,
-                        keyboardType: TextInputType.datetime,
-                        decoration: InputDecoration(
-                            labelText: 'Owned Since (MM/YY)',
-                            border: InputBorder.none),
+                      child: InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) => Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: CalendarDatePicker(
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(1995),
+                                      lastDate: DateTime.now(),
+                                      onDateChanged: (val) {
+                                        provider.setDate(val);
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ));
+                        },
+                        child: TextFormField(
+                          enabled: false,
+                          controller: provider.ownedSinceController,
+                          keyboardType: TextInputType.datetime,
+                          decoration: InputDecoration(
+                              labelText: 'Owned Since',
+                              border: InputBorder.none),
+                        ),
                       ),
                     ),
                     Container(
@@ -156,13 +178,14 @@ class _PlantDetailPageState extends State<PlantDetailPage> {
                     ),
                   ],
                 ),
-                provider.category != null
+                provider.category != null &&
+                        provider.category.categoryList.length > 0
                     ? Container(
                         color: Colors.white,
                         padding: EdgeInsets.all(8),
                         width: MediaQuery.of(context).size.width,
                         child: DropdownButton<CategoryList>(
-                          hint: Text(provider.catx.name),
+                          hint: Text(provider.catx.name ?? ''),
                           isExpanded: true,
                           items: provider.category.categoryList
                               .map((CategoryList value) {

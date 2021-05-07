@@ -11,9 +11,6 @@ class HomeProvider extends ChangeNotifier {
   Set<Marker> markers = {};
   HomeProvider(mContext) {
     _determinePosition().then((position) {
-      SharedPreferences.getInstance().then((value) {
-        print(value.getString('USER'));
-      });
       currentLocation = CameraPosition(
           bearing: 0,
           target: LatLng(position.latitude, position.longitude),
