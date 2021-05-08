@@ -175,8 +175,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           minMaxZoomPreference: MinMaxZoomPreference.unbounded,
                           myLocationEnabled: false,
                           initialCameraPosition: CameraPosition(
-                              target: LatLng(
-                                  provider.appUser.lat, provider.appUser.lng),
+                              target: provider.appUser != null
+                                  ? LatLng(provider.appUser.lat,
+                                      provider.appUser.lng)
+                                  : LatLng(19, 20),
                               zoom: 13),
                           onMapCreated: (GoogleMapController controller) async {
                             // _controller.complete(controller);
