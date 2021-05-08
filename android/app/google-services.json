@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "1023091116899-28cvpmgmu5boigtneolnj5c3e6qhdn6s.apps.googleusercontent.com",
+          "client_id": "1023091116899-6vajflauitffq49nliav827pdk1dpnig.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vrksh_vaatika",
+            "certificate_hash": "cd534052e18562a80ee7a824e63d96e595fae981"
+          }
+        },
+        {
+          "client_id": "1023091116899-8abhicr3dvo6rqln4bnd8cascsqslns4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.vrksh_vaatika",
