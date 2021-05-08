@@ -28,11 +28,12 @@ class OfferDetailsPage extends StatelessWidget {
         bottom: PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight * 2.5),
             child: MyPlantItem(
+              isOffer: false,
               data: data,
             )),
       ),
       body: tradeProvider.tradeLoader
-          ? LinearProgressIndicator
+          ? LinearProgressIndicator()
           : (tradeProvider.tradeOfferlist != null &&
                   tradeProvider.tradeOfferlist.data != null &&
                   tradeProvider.tradeOfferlist.data.length > 0)

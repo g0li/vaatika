@@ -45,6 +45,7 @@ class MyTradeTab extends StatelessWidget {
                     shrinkWrap: true,
                     primary: false,
                     itemBuilder: (c, i) => MyPlantItem(
+                      isOffer: false,
                       data: provider.listings.data[i],
                       onDelete: () {
                         provider.deleteListing(
