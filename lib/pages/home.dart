@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:vrksh_vaatika/pages/login.dart';
 import 'package:vrksh_vaatika/pages/profile.dart';
 import 'package:vrksh_vaatika/pages/trade/trade.dart';
@@ -34,45 +35,54 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  bool isMapLoading = true;
   HomeProvider provider;
   @override
   Widget build(BuildContext context) {
     provider = Provider.of<HomeProvider>(context);
     return Scaffold(
-      floatingActionButton: ExpandableFab(
-        distance: 112.0,
-        children: [
-          ActionButton(
-            onPressed: () {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                Navigator.push(context,
-                        CupertinoPageRoute(builder: (c) => GardenPage()))
-                    .then((value) => HomeProvider(context));
-              });
-            },
-            icon: Icon(Icons.grass),
-          ),
-          ActionButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                      builder: (c) => ChangeNotifierProvider(
-                            child: ProfilePage(),
-                            create: (c) => ProfileProvider(c),
-                          )));
-            },
-            icon: const Icon(Icons.face_retouching_natural),
-          ),
-          ActionButton(
-            onPressed: () {
-              Navigator.push(
-                  context, CupertinoPageRoute(builder: (c) => TradePage()));
-            },
-            icon: const Icon(Icons.swap_calls),
-          ),
-        ],
-      ),
+      floatingActionButton: provider.currentLocation == null
+          ? Shimmer.fromColors(
+              baseColor: Colors.grey[300],
+              highlightColor: Colors.grey[100],
+              child: FloatingActionButton(
+                elevation: 0,
+                onPressed: null,
+              ))
+          : ExpandableFab(
+              distance: 112.0,
+              children: [
+                ActionButton(
+                  onPressed: () {
+                    SchedulerBinding.instance.addPostFrameCallback((_) {
+                      Navigator.push(context,
+                              CupertinoPageRoute(builder: (c) => GardenPage()))
+                          .then((value) => HomeProvider(context));
+                    });
+                  },
+                  icon: Icon(Icons.grass),
+                ),
+                ActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (c) => ChangeNotifierProvider(
+                                  child: ProfilePage(),
+                                  create: (c) => ProfileProvider(c),
+                                )));
+                  },
+                  icon: const Icon(Icons.face_retouching_natural),
+                ),
+                ActionButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        CupertinoPageRoute(builder: (c) => TradePage()));
+                  },
+                  icon: const Icon(Icons.swap_calls),
+                ),
+              ],
+            ),
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
         child: SafeArea(
@@ -80,7 +90,16 @@ class _HomePageState extends State<HomePage> {
           child: Stack(
             children: [
               provider.currentLocation == null
-                  ? Container()
+                  ? Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Shimmer.fromColors(
+                          baseColor: Colors.grey[800],
+                          highlightColor: Colors.grey[100],
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          )),
+                    )
                   : GoogleMap(
                       markers: provider.markers,
                       myLocationButtonEnabled: true,
@@ -89,6 +108,7 @@ class _HomePageState extends State<HomePage> {
                       myLocationEnabled: true,
                       initialCameraPosition: provider.currentLocation,
                       onMapCreated: (GoogleMapController controller) async {
+                        isMapLoading = false;
                         _controller.complete(controller);
                         _controller.future
                             .then((value) => value.setMapStyle(_mapStyle));
