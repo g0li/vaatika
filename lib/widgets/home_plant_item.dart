@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:provider/provider.dart';
 import 'package:vrksh_vaatika/model/listing/listings.dart';
 import 'package:vrksh_vaatika/pages/offer_details.dart';
 import 'package:vrksh_vaatika/pages/send_offer.dart';
+import 'package:vrksh_vaatika/provider/trade_provider.dart';
 
 class HomePlantItem extends StatelessWidget {
   HomePlantItem(this.data);
@@ -74,7 +76,12 @@ class HomePlantItem extends StatelessWidget {
                         Navigator.push(
                             context,
                             CupertinoPageRoute(
-                                builder: (c) => OfferDetailsPage(data: data)));
+                                builder: (c) => ChangeNotifierProvider(
+                                      child: OfferDetailsPage(data: data),
+                                      create: (c) => TradeProvider(
+                                        c,
+                                      ),
+                                    )));
                       },
                     )),
                 Expanded(

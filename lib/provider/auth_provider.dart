@@ -24,8 +24,8 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     }
 
-    void verificationFailed(error) {
-      printWrapped(error);
+    void verificationFailed(FirebaseAuthException error) {
+      printWrapped(error.message);
       notifyListeners();
     }
 
@@ -75,8 +75,12 @@ class AuthProvider extends ChangeNotifier {
             lng: 20,
             id: firebaseUser.uid);
         return AuthService.login(mContext, body).then((aUser) async {
-          await saveUserData(aUser);
-          return aUser;
+          if (aUser.token != null) {
+            await saveUserData(aUser);
+            return aUser;
+          } else {
+            return AppUser();
+          }
         });
       });
     } catch (e) {

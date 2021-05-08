@@ -55,16 +55,20 @@ class HomeProvider extends ChangeNotifier {
 
   getMarkerImage(Listings listng) async {
     markers.clear();
-    print('listing length: ${listng.data.length}');
-    for (int i = 0; i <= listng.data.length; i++) {
-      markers.add(Marker(
-          markerId: MarkerId(listng.data[i].id.toString()),
-          position: LatLng(listng.data[i].lat, listng.data[i].lng),
-          onTap: () {
-            controller.animateToPage(i,
-                duration: Duration(milliseconds: 900), curve: Curves.elasticIn);
-          }));
-    }
+    try {
+      print('listing length: ${listng.data.length}');
+      for (int i = 0; i <= listng.data.length; i++) {
+        markers.add(Marker(
+            markerId: MarkerId(listng.data[i].id.toString()),
+            position: LatLng(listng.data[i].lat, listng.data[i].lng),
+            onTap: () {
+              controller.animateToPage(i,
+                  duration: Duration(milliseconds: 900),
+                  curve: Curves.elasticIn);
+            }));
+      }
+    } catch (e) {}
+    notifyListeners();
   }
 
   Datum selectedMarker;

@@ -10,9 +10,10 @@ import 'package:vrksh_vaatika/provider/edit_listing_provider.dart';
 import 'package:vrksh_vaatika/services/listings_services.dart';
 
 class MyPlantItem extends StatefulWidget {
-  MyPlantItem({this.data, this.onDelete});
+  MyPlantItem({this.data, this.onDelete, @required this.isOffer});
   final Datum data;
   final Function onDelete;
+  final bool isOffer;
   @override
   _MyPlantItemState createState() => _MyPlantItemState();
 }
@@ -54,37 +55,39 @@ class _MyPlantItemState extends State<MyPlantItem> {
               )
             ],
           )),
-          Row(
-            children: [
-              Expanded(
-                  child: TextButton(
-                child: Text('Edit',
-                    style: TextStyle(
-                      color: Colors.black,
+          widget.isOffer == true
+              ? Row(
+                  children: [
+                    Expanded(
+                        child: TextButton(
+                      child: Text('Edit',
+                          style: TextStyle(
+                            color: Colors.black,
+                          )),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => ChangeNotifierProvider(
+                                      child: EditTradeItemPage(),
+                                      create: (c) =>
+                                          EditListingProvider(c, widget.data),
+                                    )));
+                      },
                     )),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) => ChangeNotifierProvider(
-                                child: EditTradeItemPage(),
-                                create: (c) =>
-                                    EditListingProvider(c, widget.data),
-                              )));
-                },
-              )),
-              Expanded(
-                  child: TextButton(
-                child: Text('Delete',
-                    style: TextStyle(
-                      color: Colors.red.shade900,
-                    )),
-                onPressed: () {
-                  widget.onDelete();
-                },
-              ))
-            ],
-          )
+                    Expanded(
+                        child: TextButton(
+                      child: Text('Delete',
+                          style: TextStyle(
+                            color: Colors.red.shade900,
+                          )),
+                      onPressed: () {
+                        widget.onDelete();
+                      },
+                    ))
+                  ],
+                )
+              : Container()
         ],
       ),
     );
