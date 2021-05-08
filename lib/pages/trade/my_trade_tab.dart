@@ -44,8 +44,13 @@ class MyTradeTab extends StatelessWidget {
                   child: ListView.builder(
                     shrinkWrap: true,
                     primary: false,
-                    itemBuilder: (c, i) =>
-                        MyPlantItem(data: provider.listings.data[i]),
+                    itemBuilder: (c, i) => MyPlantItem(
+                      data: provider.listings.data[i],
+                      onDelete: () {
+                        provider.deleteListing(
+                            context, provider.listings.data[i].id);
+                      },
+                    ),
                     itemCount: provider.listings.data.length,
                   ),
                 )

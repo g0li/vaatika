@@ -42,6 +42,27 @@ Future callPostMethodWithToken(BuildContext mContext, String url,
   });
 }
 
+Future callDeleteMethodWithToken(BuildContext mContext, String url,
+    Map<String, dynamic> params, String token) async {
+  return http.delete(Uri.https('vrksh-vaatika-backend.azurewebsites.net', url),
+      body: jsonEncode(params),
+      headers: {
+        "Accept": "application/json",
+        "content-type": "application/json",
+        "lancode": "en",
+        "platform": Platform.operatingSystem,
+        "Authorization": "Bearer " + token
+      }).then((http.Response response) {
+    final int statusCode = response.statusCode;
+    if (statusCode == 401) {
+      return 'Error statusCode';
+    } else if (statusCode < 200 || statusCode > 404 || json == null) {
+      return 'Error statusCode';
+    }
+    return response.body;
+  });
+}
+
 Future callPostMethodNoBodyToken(
     BuildContext mContext, String url, String token) async {
   var header = {

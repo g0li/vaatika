@@ -10,4 +10,12 @@ class MyListingsProvider extends ChangeNotifier {
       notifyListeners();
     });
   }
+  deleteListing(mContext, id) {
+    ListingsService.deleteListings(mContext, id).then((value) {
+      ListingsService.getMyListings(mContext).then((listingxs) {
+        this.listings = listingxs;
+        notifyListeners();
+      });
+    });
+  }
 }

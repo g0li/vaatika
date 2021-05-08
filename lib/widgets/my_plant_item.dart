@@ -7,10 +7,17 @@ import 'package:vrksh_vaatika/model/listing/listings.dart';
 import 'package:vrksh_vaatika/pages/trade/edit_trade.dart';
 import 'package:vrksh_vaatika/pages/trade/new_trade.dart';
 import 'package:vrksh_vaatika/provider/edit_listing_provider.dart';
+import 'package:vrksh_vaatika/services/listings_services.dart';
 
-class MyPlantItem extends StatelessWidget {
-  MyPlantItem({this.data});
+class MyPlantItem extends StatefulWidget {
+  MyPlantItem({this.data, this.onDelete});
   final Datum data;
+  final Function onDelete;
+  @override
+  _MyPlantItemState createState() => _MyPlantItemState();
+}
+
+class _MyPlantItemState extends State<MyPlantItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,10 +27,10 @@ class MyPlantItem extends StatelessWidget {
               child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              if (data.image != null)
+              if (widget.data.image != null)
                 Flexible(
                   child: Image.memory(
-                    base64Decode(data.image),
+                    base64Decode(widget.data.image),
                     height: 100,
                     fit: BoxFit.fill,
                   ),
@@ -36,8 +43,8 @@ class MyPlantItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(data.plantName),
-                      Text('Trading for : ${data.lookingFor}'),
+                      Text(widget.data.plantName),
+                      Text('Trading for : ${widget.data.lookingFor}'),
                       Text('Status : ACTIVE'),
                     ],
                   ),
@@ -61,7 +68,8 @@ class MyPlantItem extends StatelessWidget {
                       CupertinoPageRoute(
                           builder: (context) => ChangeNotifierProvider(
                                 child: EditTradeItemPage(),
-                                create: (c) => EditListingProvider(c, data),
+                                create: (c) =>
+                                    EditListingProvider(c, widget.data),
                               )));
                 },
               )),
@@ -71,7 +79,9 @@ class MyPlantItem extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.red.shade900,
                     )),
-                onPressed: () {},
+                onPressed: () {
+                  widget.onDelete();
+                },
               ))
             ],
           )
