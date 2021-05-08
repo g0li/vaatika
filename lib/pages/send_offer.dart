@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vrksh_vaatika/model/listing/listings.dart';
 import 'package:vrksh_vaatika/pages/plant_detail.dart';
 
 class SendOfferPage extends StatelessWidget {
+  final Datum listingData;
+
+  SendOfferPage({@required this.listingData});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +66,9 @@ class SendOfferPage extends StatelessWidget {
                                 color: Colors.green,
                                 icon: Icon(Icons.add),
                                 iconSize: 50,
-                                onPressed: () {},
+                                onPressed: () {
+                                  _selectListingToOffer(context);
+                                },
                               ),
                             );
                           } else {
@@ -202,5 +209,62 @@ class SendOfferPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // select a listing
+  _selectListingToOffer(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        builder: (BuildContext ctx) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  'Select a listing to offer',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: 10,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(16),
+                  itemBuilder: (ctx, i) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Card(
+                          child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Looking for:',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text('Show plants list here'),
+                          ],
+                        ),
+                      )),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        });
   }
 }
