@@ -19,6 +19,7 @@ class HomeProvider extends ChangeNotifier {
         this.listing = listing;
         if (listing != null && listing.data.length > 0) {
           getMarkerImage(listing);
+          notifyListeners();
         } else {
           notifyListeners();
         }
@@ -55,6 +56,7 @@ class HomeProvider extends ChangeNotifier {
   getMarkerImage(Listings listng) async {
     markers.clear();
     try {
+      print('listing length: ${listng.data.length}');
       for (int i = 0; i <= listng.data.length; i++) {
         markers.add(Marker(
             markerId: MarkerId(listng.data[i].id.toString()),
