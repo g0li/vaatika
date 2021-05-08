@@ -169,25 +169,27 @@ class _ProfilePageState extends State<ProfilePage> {
                             },
                       child: AbsorbPointer(
                         absorbing: true,
-                        child: GoogleMap(
-                          myLocationButtonEnabled: false,
-                          zoomControlsEnabled: false,
-                          minMaxZoomPreference: MinMaxZoomPreference.unbounded,
-                          myLocationEnabled: false,
-                          initialCameraPosition: CameraPosition(
-                              target: provider.appUser != null
-                                  ? LatLng(provider.appUser.lat,
-                                      provider.appUser.lng)
-                                  : LatLng(19, 20),
-                              zoom: 13),
-                          onMapCreated: (GoogleMapController controller) async {
-                            // _controller.complete(controller);
-                            controller.setMapStyle(_mapStyle);
-                          },
-                          padding:
-                              EdgeInsets.only(bottom: 220, right: 8, top: 84),
-                          mapType: MapType.terrain,
-                        ),
+                        child: provider.appUser != null
+                            ? GoogleMap(
+                                myLocationButtonEnabled: false,
+                                zoomControlsEnabled: false,
+                                minMaxZoomPreference:
+                                    MinMaxZoomPreference.unbounded,
+                                myLocationEnabled: false,
+                                initialCameraPosition: CameraPosition(
+                                    target: LatLng(provider.appUser.lat,
+                                        provider.appUser.lng),
+                                    zoom: 13),
+                                onMapCreated:
+                                    (GoogleMapController controller) async {
+                                  // _controller.complete(controller);
+                                  controller.setMapStyle(_mapStyle);
+                                },
+                                padding: EdgeInsets.only(
+                                    bottom: 220, right: 8, top: 84),
+                                mapType: MapType.terrain,
+                              )
+                            : Container(),
                       ),
                     ),
                   ),

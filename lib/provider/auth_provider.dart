@@ -70,7 +70,7 @@ class AuthProvider extends ChangeNotifier {
             contact: firebaseUser.phoneNumber,
             os: Platform.operatingSystem,
             deviceId: dId,
-            name: "Roshan Singh",
+            name: "New User",
             lat: 19,
             lng: 20,
             id: firebaseUser.uid);
