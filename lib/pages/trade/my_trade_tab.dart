@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:vrksh_vaatika/services/my_listings_provider.dart';
 import 'package:vrksh_vaatika/widgets/home_plant_item.dart';
 import 'package:vrksh_vaatika/widgets/my_plant_item.dart';
@@ -48,7 +49,16 @@ class MyTradeTab extends StatelessWidget {
                     itemCount: provider.listings.data.length,
                   ),
                 )
-              : Container(),
+              : Container(
+                  height: MediaQuery.of(context).size.height * .1,
+                  width: MediaQuery.of(context).size.width,
+                  child: Shimmer.fromColors(
+                      baseColor: Colors.grey[300],
+                      highlightColor: Colors.grey[100],
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      )),
+                )
         ],
       ),
     );
