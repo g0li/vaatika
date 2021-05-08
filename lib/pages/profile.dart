@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vrksh_vaatika/model/user_body.dart';
 import 'package:vrksh_vaatika/pages/login.dart';
+import 'package:vrksh_vaatika/pages/map_page.dart';
 import 'package:vrksh_vaatika/provider/profile_provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -22,6 +24,15 @@ class _ProfilePageState extends State<ProfilePage> {
   ProfileProvider provider;
 
   FocusNode nameFN = FocusNode(debugLabel: 'name');
+  String _mapStyle;
+  @override
+  void initState() {
+    super.initState();
+
+    rootBundle.loadString('assets/map_style.txt').then((string) {
+      _mapStyle = string;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,22 +146,46 @@ class _ProfilePageState extends State<ProfilePage> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 200,
-                    child: AbsorbPointer(
-                      absorbing: true,
-                      child: GoogleMap(
-                        myLocationButtonEnabled: false,
-                        zoomControlsEnabled: false,
-                        minMaxZoomPreference: MinMaxZoomPreference.unbounded,
-                        myLocationEnabled: false,
-                        initialCameraPosition: provider.userLocation ??
-                            CameraPosition(target: LatLng(19, 20), zoom: 8),
-                        onMapCreated: (GoogleMapController controller) async {
-                          // _controller.complete(controller);
-                          // controller.setMapStyle(_mapStyle);
-                        },
-                        padding:
-                            EdgeInsets.only(bottom: 220, right: 8, top: 84),
-                        mapType: MapType.terrain,
+                    child: InkWell(
+                      onTap: provider.edit != true
+                          ? null
+                          : () {
+                              SchedulerBinding.instance
+                                  .addPostFrameCallback((_) {
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (c) => MapPage(
+                                              location: LatLng(
+                                                  provider.appUser.lat,
+                                                  provider.appUser.lng),
+                                            ))).then((value) {
+                                  provider.appUser.lat =
+                                      (value as LatLng).latitude;
+                                  provider.appUser.lng =
+                                      (value as LatLng).longitude;
+                                });
+                              });
+                            },
+                      child: AbsorbPointer(
+                        absorbing: true,
+                        child: GoogleMap(
+                          myLocationButtonEnabled: false,
+                          zoomControlsEnabled: false,
+                          minMaxZoomPreference: MinMaxZoomPreference.unbounded,
+                          myLocationEnabled: false,
+                          initialCameraPosition: CameraPosition(
+                              target: LatLng(
+                                  provider.appUser.lat, provider.appUser.lng),
+                              zoom: 13),
+                          onMapCreated: (GoogleMapController controller) async {
+                            // _controller.complete(controller);
+                            controller.setMapStyle(_mapStyle);
+                          },
+                          padding:
+                              EdgeInsets.only(bottom: 220, right: 8, top: 84),
+                          mapType: MapType.terrain,
+                        ),
                       ),
                     ),
                   ),

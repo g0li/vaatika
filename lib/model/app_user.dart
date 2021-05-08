@@ -26,8 +26,8 @@ class AppUser {
   final String id;
   final String name;
   final String contact;
-  final double lat;
-  final double lng;
+  double lat;
+  double lng;
   final String deviceId;
   final String os;
   final DateTime updatedAt;
