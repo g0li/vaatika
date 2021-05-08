@@ -47,6 +47,12 @@ class NewListingProvider extends ChangeNotifier {
           TextEditingController(text: this.datum.quantity.toString());
       catx = category.categoryList
           .firstWhere((element) => element.id == this.datum.categoryId);
+    } else {
+      plantNameController = TextEditingController();
+      descriptionController = TextEditingController();
+      ownedSinceController = TextEditingController();
+      quantityController = TextEditingController();
+      lookinForController = TextEditingController();
     }
     notifyListeners();
   }
