@@ -512,6 +512,7 @@ class _SendOfferPageState extends State<SendOfferPage> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Please confirm your offer'),
         ));
+        return;
       }
 
       setLoader(true);
