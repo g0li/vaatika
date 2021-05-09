@@ -16,6 +16,16 @@ class TradeServices {
     });
   }
 
+  static Future<TradeOffers> getOfferByListing(
+      BuildContext mContext, id) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    AppUser user = AppUser.fromJson(pref.getString('USER'));
+    return callGetMethod(mContext, '/api/offer/listing/$id', {}, user.token)
+        .then((value) {
+      return TradeOffers.fromJson(value);
+    });
+  }
+
   static Future<UserUpdateResponse> editUserTradeOffers(
       BuildContext mContext, offerId) async {
     SharedPreferences pref = await SharedPreferences.getInstance();

@@ -15,8 +15,10 @@ import 'package:vrksh_vaatika/provider/new_listing_provider.dart';
 import 'package:vrksh_vaatika/provider/profile_provider.dart';
 import 'package:vrksh_vaatika/provider/trade_provider.dart';
 import 'package:vrksh_vaatika/services/my_listings_provider.dart';
+import 'package:vrksh_vaatika/services/open_listings_provider.dart';
 
 import 'pages/trade/new_trade.dart';
+import 'pages/trade/open_trade_tab.dart';
 import 'provider/plant_detail_provider.dart';
 
 void main() async {
@@ -60,7 +62,11 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           child: OfferDetailsPage(),
-          create: (c) => TradeProvider(c),
+          create: (c) => TradeProvider(c, 0),
+        ),
+        ChangeNotifierProvider(
+          child: OpenTradeTab(),
+          create: (c) => OpenListingsProvider(c),
         )
       ],
       child: MaterialApp(

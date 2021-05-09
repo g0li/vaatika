@@ -6,9 +6,9 @@ class TradeProvider with ChangeNotifier {
   TradeOffers tradeOfferlist;
   bool tradeLoader;
 
-  TradeProvider(BuildContext mContext) {
+  TradeProvider(BuildContext mContext,id) {
     setTradeLoader(true);
-    TradeServices.getUserTradeOffers(mContext).then((val) {
+    TradeServices.getOfferByListing(mContext,id).then((val) {
       tradeOfferlist = val;
       tradeLoader = false;
       notifyListeners();

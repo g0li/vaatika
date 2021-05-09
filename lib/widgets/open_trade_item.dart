@@ -3,17 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:vrksh_vaatika/model/listing/listings.dart';
+import 'package:vrksh_vaatika/model/trade_offers.dart';
+
 import 'package:vrksh_vaatika/pages/offer_details.dart';
 import 'package:vrksh_vaatika/pages/send_offer.dart';
 import 'package:vrksh_vaatika/provider/trade_provider.dart';
 
-class HomePlantItem extends StatelessWidget {
-  HomePlantItem(this.data);
+class OpenTradePlantItem extends StatelessWidget {
+  OpenTradePlantItem(this.data);
   final Datum data;
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 200,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.grey.shade100,
@@ -29,17 +31,17 @@ class HomePlantItem extends StatelessWidget {
                 child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Container(
-                    child: Image.memory(
-                      base64Decode(data.image),
-                      height: 100,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  flex: 1,
-                ),
+                // Flexible(
+                //   fit: FlexFit.loose,
+                //   child: Container(
+                //     child: Image.memory(
+                //       base64Decode(data.listerProfilePicture),
+                //       height: 100,
+                //       fit: BoxFit.fill,
+                //     ),
+                //   ),
+                //   flex: 1,
+                // ),
                 Flexible(
                   fit: FlexFit.loose,
                   child: Padding(
@@ -47,9 +49,9 @@ class HomePlantItem extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(data.plantName),
+                        Text(data.offererName),
                         // Text('0.2 km'),
-                        Text('Trading for : ${data.lookingFor}'),
+                        Text('Trading for : ${data.createdAt}'),
                         Text('Status : ${data.status}'),
                       ],
                     ),
@@ -73,13 +75,13 @@ class HomePlantItem extends StatelessWidget {
                             color: Colors.black,
                           )),
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (c) => ChangeNotifierProvider(
-                                      child: OfferDetailsPage(data: data),
-                                      create: (c) => TradeProvider(c, data.id),
-                                    )));
+                        // Navigator.push(
+                        //     context,
+                        //     CupertinoPageRoute(
+                        //         builder: (c) => ChangeNotifierProvider(
+                        //               child: OfferDetailsPage(data: data),
+                        //               create: (c) => TradeProvider(c, data.id),
+                        //             )));
                       },
                     )),
                 Expanded(
@@ -90,12 +92,12 @@ class HomePlantItem extends StatelessWidget {
                             color: Colors.black,
                           )),
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (c) => SendOfferPage(
-                                      listingData: data,
-                                    )));
+                        // Navigator.push(
+                        //     context,
+                        //     CupertinoPageRoute(
+                        //         builder: (c) => SendOfferPage(
+                        //               listingData: data,
+                        //             )));
                       },
                     )),
                 Expanded(
