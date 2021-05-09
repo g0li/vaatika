@@ -53,7 +53,6 @@ class MyApp extends StatelessWidget {
           create: (c) => NewListingProvider(c),
         ),
         ChangeNotifierProvider(
-          child: MyTradeTab(),
           create: (c) => MyListingsProvider(c),
         ),
         ChangeNotifierProvider(

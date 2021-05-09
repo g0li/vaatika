@@ -47,4 +47,24 @@ class TradeServices {
       return UserUpdateResponse.fromJson(value);
     });
   }
+
+  static Future<UserUpdateResponse> createTradeOffer({
+    @required BuildContext mContext,
+    @required int listingId,
+    @required int offeredListingId,
+  }) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    AppUser user = AppUser.fromJson(pref.getString('USER'));
+    return callPostMethodWithToken(
+            mContext,
+            '/api/offer/create',
+            {
+              "listingId": listingId,
+              "offeredListingId": offeredListingId,
+            },
+            user.token)
+        .then((value) {
+      return UserUpdateResponse.fromJson(value);
+    });
+  }
 }

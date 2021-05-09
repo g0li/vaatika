@@ -35,7 +35,44 @@ class ListingsService {
     return callGetMethod(
             mContext, '/api/listing/get/$listingId', {}, user.token)
         .then((value) {
-      return Listings.fromJson(value);
+      Listings listingxs = Listings.fromJson(value);
+      List<Datum> list = [];
+      if (listingxs != null && listingxs.data != null) {
+        listingxs.data.forEach((ls) {
+          print(ls.plantName);
+
+          ListingPlants pl = ListingPlants(
+            category: ls.category,
+            description: ls.description,
+            ownedSince: ls.ownedSince,
+            plantName: ls.plantName,
+            quantity: ls.quantity,
+            image: ls.image,
+          );
+
+          // check if entry exists
+          if (list.any((el) => el.id == ls.id)) {
+            // exists, add plants
+            // get index
+            print('${ls.id} exists, adding ${pl.plantName}');
+            int indx = list.indexWhere((el) => el.id == ls.id);
+            // add
+            list[indx].plantsList.add(pl);
+          } else {
+            // new entry
+            print('Added new ${pl.plantName} to ${ls.id}');
+            ls.plantsList = [pl];
+            list.add(ls);
+          }
+        });
+      }
+      Listings listing = Listings(
+        data: list,
+        status: 1,
+      );
+      return listing;
+    }).catchError((err) {
+      return null;
     });
   }
 

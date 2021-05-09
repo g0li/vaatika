@@ -11,7 +11,7 @@ class Listings {
   });
 
   final int status;
-  final List<Datum> data;
+  List<Datum> data;
 
   factory Listings.fromJson(String str) => Listings.fromMap(json.decode(str));
 
@@ -46,6 +46,7 @@ class Datum {
     this.userName,
     this.createdAt,
     this.updatedAt,
+    this.plantsList,
   });
 
   final int id;
@@ -64,6 +65,7 @@ class Datum {
   final String userName;
   final DateTime createdAt;
   final DateTime updatedAt;
+  List<ListingPlants> plantsList;
 
   factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
 
@@ -106,4 +108,22 @@ class Datum {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
       };
+}
+
+class ListingPlants {
+  String plantName;
+  String description;
+  String ownedSince;
+  String category;
+  int quantity;
+  String image;
+
+  ListingPlants({
+    this.plantName,
+    this.description,
+    this.ownedSince,
+    this.category,
+    this.quantity,
+    this.image,
+  });
 }
